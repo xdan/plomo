@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import styles from './style.module.less';
 
-const Suggestion = (props) => (<div className={styles.suggetionsItem}>{props.children}</div>);
+const Suggestion = (props) => (<div className={styles.suggetionsItem + ' ' + (props.current ? styles.current : '')}>{props.children}</div>);
 export class Suggestions extends Component {
     componentDidUpdate() {
         if (this.suggestion) {
@@ -14,8 +14,10 @@ export class Suggestions extends Component {
     };
 
     render() {
+        const {currentIndex} = this.props;
+
         const list = this.props.list.map((item, index) => {
-            return <Suggestion key={index}>{item}</Suggestion>;
+            return <Suggestion current={currentIndex === index} key={index}>{item}</Suggestion>;
         });
 
         return (
