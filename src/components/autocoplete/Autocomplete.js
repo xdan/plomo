@@ -14,6 +14,15 @@ export class Autocomplete extends Component {
             ...this.state,
             value
         });
+
+        this.props
+            .loadData(value)
+            .then((suggestions) => {
+                this.setState({
+                    ...this.state,
+                    suggestions
+                });
+            });
     };
 
     render() {

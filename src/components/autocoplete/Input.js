@@ -5,6 +5,7 @@ export class Input extends Component {
     onChange = (e) => {
         this.props.setValue(e.target.value);
     };
+
     render() {
         const {value, placeholder} = this.props;
 
