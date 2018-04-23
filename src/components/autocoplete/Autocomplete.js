@@ -5,7 +5,7 @@ import {Input} from "./Input";
 
 export class Autocomplete extends Component {
     state = {
-        value: 'test',
+        value: '',
         suggestions: []
     };
 
