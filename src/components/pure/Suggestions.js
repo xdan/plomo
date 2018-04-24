@@ -27,7 +27,10 @@ class Suggestion extends WithProps{
             ].join('');
         }
 
-        this.container.classList.toggle(styles.current, current);
+        if (current) {
+            this.container.classList.add(styles.current);
+        }
+
         this.container.innerHTML = value;
     }
 }

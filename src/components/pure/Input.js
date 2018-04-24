@@ -11,23 +11,22 @@ export class Input extends WithProps{
             case KEY_ESC:
                 this.props.setQuery(null, true);
                 e.preventDefault();
-                break;
+                return;
             case KEY_RIGHT:
                 if (e.target.selectionStart === e.target.value.length && this.__possibleValue !== null) {
                     this.props.setQuery(this.__possibleValue, true);
                     e.preventDefault();
-                    break;
+                    return;
                 }
-                break;
             case KEY_ENTER:
                 this.props.setQuery(e.target.value, true);
                 e.preventDefault();
-                break;
+                return;
             case KEY_UP:
             case KEY_DOWN:
                 this.props.incrementCurrent(e.which === KEY_UP);
                 e.preventDefault();
-                break;
+                return;
         }
 
         if (this.oldValue !== e.target.value) {
