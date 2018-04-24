@@ -25,9 +25,14 @@ or pure js
 ```js
 import Plomo from "plomo/src/components/pure/Plomo";
 var plomo = new Plomo({
-	loadData: this.dataProvider.loadData
+	loadData: function () {
+     	return new Promise(...);
+    }
 });
 document.body.appendChild(plomo.container);
 ```
 
 
+### Licence
+
+MIT
