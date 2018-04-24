@@ -10,15 +10,39 @@ export class Input extends Component {
         }
     };
     onChange = (e) => {
-        this.props.setValue(e.target.value);
+        this.props.setQuery(e.target.value);
     };
 
     render() {
-        const {value, placeholder} = this.props;
+        let placeholder = '',
+            {query, firstSuggestion} = this.props;
 
-        return (<div className={styles.inputBox}>
-            <input value={placeholder || value || 'Type something...'} className={styles.placeholder} type="text" tabIndex={-1} readOnly={true}/>
-            <input onKeyDown={this.onKeyDown} onChange={this.onChange} defaultValue={value} tabIndex={0} type="text" autoFocus={true}/>
-        </div>);
+        let index = typeof firstSuggestion === 'string' && firstSuggestion.toLowerCase().indexOf(query.toLowerCase());
+
+        if (index === 0 && query.length) {
+            placeholder = query + firstSuggestion.substr(query.length);
+        }
+
+        if (!query.length) {
+            placeholder = 'Type something...'
+        }
+
+        return <div onClick={this.props.onClick} className={styles.inputBox}>
+            <input
+                value={placeholder}
+                className={styles.placeholder}
+                type="text"
+                tabIndex={-1}
+                readOnly={true}
+            />
+            <input
+                onKeyDown={this.onKeyDown}
+                onChange={this.onChange}
+                defaultValue={query}
+                tabIndex={0}
+                type="text"
+                autoFocus={true}
+            />
+        </div>
     }
 }
