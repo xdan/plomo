@@ -1,11 +1,15 @@
 import React, {Component} from "react";
 import styles from './style.module.less';
-import {KEY_DOWN, KEY_ENTER, KEY_RIGHT, KEY_UP} from "../../consts";
+import {KEY_DOWN, KEY_ENTER, KEY_ESC, KEY_RIGHT, KEY_UP} from "../../consts";
 
 export class Input extends Component {
     __possibleValue = null;
     onKeyDown = (e) => {
         switch (e.which) {
+            case KEY_ESC:
+                this.props.setQuery(null, true);
+                e.preventDefault();
+                break;
             case KEY_RIGHT:
                 if (e.target.selectionStart === e.target.value.length && this.__possibleValue !== null) {
                     this.props.setQuery(this.__possibleValue, true);

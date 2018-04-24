@@ -48,7 +48,6 @@ class ClickOutside extends Component {
     __isOutside = true;
 
     handleDocumentClick = (e) => {
-        console.log(this.__isOutside);
         if (this.__isOutside) {
             this.props.handleClickOutside && this.props.handleClickOutside(e);
         }
@@ -137,6 +136,13 @@ export default class extends Component {
 
 
     setQuery = (query, andClose = false) => {
+        if (query === null) {
+            return this.setState({
+                ...this.state,
+                open: false
+            });
+        }
+
         let newState = {
             ...this.state,
             currentIndex: NON_INDEX,
