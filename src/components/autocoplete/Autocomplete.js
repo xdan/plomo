@@ -4,7 +4,46 @@ import {Suggestions} from "./Suggestions";
 import {Input} from "./Input";
 import {NON_INDEX} from "../../consts";
 
-export class ClickOutside extends Component {
+class CacheStack {
+    __stack = [];
+
+    exist(key) {
+        return this.indexOf(key) !== -1;
+    }
+    get(key) {
+        let index = this.indexOf(key);
+        return index !== -1 && this.__stack[index].value;
+    }
+
+    indexOf(key) {
+        for (let i = 0; i < this.__stack.length; i += 1) {
+            if (this.__stack[i].key === key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    pushOrReplace(key, value) {
+        let index = this.indexOf(key);
+        if (index !== -1) {
+            this.__stack[index].value = value;
+        } else {
+            this.push(key, value);
+        }
+    }
+
+    push(key, value) {
+        this.__stack.unshift({
+            key, value
+        });
+
+        if (this.__stack.length > 100) {
+            this.__stack.length = 100;
+        }
+    }
+}
+class ClickOutside extends Component {
     __elm = null;
     __isOutside = true;
 
@@ -32,6 +71,7 @@ export class ClickOutside extends Component {
     }
 }
 export class Autocomplete extends Component {
+    stack = new CacheStack();
     showCount = 10;
     state = {
         query: '',
@@ -77,12 +117,16 @@ export class Autocomplete extends Component {
         this.props
             .loadData(query)
             .then((suggestions) => {
-                this.setState({
-                    ...this.state,
-                    currentIndex: NON_INDEX,
-                    suggestions: suggestions.slice(0, this.props.showCount || this.showCount),
-                    open: autoOpen && suggestions.length > 0
-                });
+                const items = suggestions.slice(0, this.props.showCount || this.showCount)
+                this.stack.pushOrReplace(query, items);
+                if (this.state.query === query) {
+                    this.setState({
+                        ...this.state,
+                        currentIndex: NON_INDEX,
+                        suggestions: items,
+                        open: autoOpen && items.length > 0
+                    });
+                }
             });
     }
 
@@ -92,12 +136,19 @@ export class Autocomplete extends Component {
 
 
     setQuery = (query, andClose = false) => {
-        this.setState({
+        let newState = {
             ...this.state,
             currentIndex: NON_INDEX,
             open: !andClose,
             query
-        });
+        };
+
+        let suggestions = this.stack.get(query);
+        if (suggestions) {
+            newState.suggestions = suggestions;
+        }
+
+        this.setState(newState);
         
         if (!andClose) {
             this.loadSuggestions(query)
