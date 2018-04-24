@@ -5,9 +5,10 @@ import FuzzySearch from 'fuzzy-search';
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
 
-const Header = () => (<div className={styles.header}>
+const Header = () => <div className={styles.header}>
     <h1>Autocomplete JS Plugin</h1>
-</div>);
+</div>;
+
 const Footer = () => (<nav className={styles.footer}>
     <ul>
         <li><a href="https://github.com/xdan">Author</a></li>
