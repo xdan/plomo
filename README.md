@@ -4,7 +4,7 @@
 npm i plomo --save
 ```
 
-```jsx
+```js
 import React, {Component} from "react";
 import Plomo from "plomo/src/components/plomo/Plomo";
 class App extends Component {
@@ -18,6 +18,16 @@ class App extends Component {
  	return <Plomo showCount={20} loadData={this.loadData}/>
  }
 }
+```
+
+or pure js
+
+```js
+import Plomo from "plomo/src/components/pure/Plomo";
+var plomo = new Plomo({
+	loadData: this.dataProvider.loadData
+});
+document.body.appendChild(plomo.container);
 ```
 
 
