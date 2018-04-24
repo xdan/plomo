@@ -17,7 +17,6 @@
     "es2015-ie"
   ],
   "plugins": [
-    "transform-object-assign",
     "transform-class-properties",
     "transform-object-rest-spread"
   ]

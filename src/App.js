@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styles from './app.module.less';
-import {Autocomplete} from "./components/autocoplete/Autocomplete";
+import {Plomo} from "./components/autocoplete/Plomo";
 import FuzzySearch from 'fuzzy-search';
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
@@ -68,7 +68,7 @@ class App extends Component {
             <div className={styles.box}>
                 <Header/>
                 <Demo>
-                    <Autocomplete loadData={this.loadData}/>
+                    <Plomo loadData={this.loadData}/>
                     <label>
                         <Toggle
                             checked={this.state.gprs}

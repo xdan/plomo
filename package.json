@@ -1,28 +1,29 @@
 {
-  "name": "suggestion",
-  "version": "1.0.0",
+  "name": "plomo",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "newversion": "npm version patch --no-git-tag-version && npm run build && npm run newversiongit && npm publish ./",
+    "newversiongit": "git add --all  && git commit -m \"New version %npm_package_version%. Read more https://github.com/xdan/plomo/releases/tag/%npm_package_version% \" && git tag %npm_package_version% && git push --tags origin HEAD:master",
     "build": "webpack --config webpack.prod.js --mode production",
     "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/xdan/suggestions.git"
+    "url": "git+ssh://git@github.com/xdan/plomo.git"
   },
   "author": "Chupurnov Valeriy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xdan/suggestions/issues"
+    "url": "https://github.com/xdan/plomo/issues"
   },
-  "homepage": "https://github.com/xdan/suggestions#readme",
+  "homepage": "https://github.com/xdan/plomo#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",

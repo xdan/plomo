@@ -70,7 +70,7 @@ class ClickOutside extends Component {
         return <div ref={elm => this.__elm = elm}>{this.props.children}</div>;
     }
 }
-export class Autocomplete extends Component {
+export class Plomo extends Component {
     stack = new CacheStack();
     showCount = 10;
     state = {
