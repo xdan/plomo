@@ -43,14 +43,13 @@ module.exports = {
 			},
 			{
 				test: /\.(less|css)$/,
-
+                exclude: /\.module\.(less|css)$/,
 				use: ExtractTextPlugin.extract({
 					use: [
 						{
 							loader: 'css-loader',
 							options: {
 								sourceMap: true,
-								modules: true,
 								minimize: true
 							}
 						},
@@ -63,7 +62,29 @@ module.exports = {
 					],
 					fallback: 'style-loader'
 				})
-			}
+			},
+            {
+                test: /\.module\.(less|css)$/,
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                                modules: true,
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                    ],
+                    fallback: 'style-loader'
+                })
+            }
 		]
 	},
 
