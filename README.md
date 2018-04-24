@@ -8,15 +8,15 @@ npm i plomo --save
 import React, {Component} from "react";
 import Plomo from "plomo/src/components/plomo/Plomo";
 class App extends Component {
-	/**
-	 * Must return Promise<string[]>
-	 */
-	loadData = () => {
-		return new Promise(...);
-	}
-	render() {
-		return <Plomo loadData={this.loadData}/>
-	}
+ /**
+  * Must return Promise<string[]>
+  */
+ loadData = () => {
+ 	return new Promise(...);
+ }
+ render() {
+ 	return <Plomo showCount={20} loadData={this.loadData}/>
+ }
 }
 ```
 
