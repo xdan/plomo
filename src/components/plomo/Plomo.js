@@ -70,7 +70,8 @@ class ClickOutside extends Component {
         return <div ref={elm => this.__elm = elm}>{this.props.children}</div>;
     }
 }
-export class Plomo extends Component {
+
+export default class extends Component {
     stack = new CacheStack();
     showCount = 10;
     state = {

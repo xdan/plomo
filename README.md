@@ -4,7 +4,20 @@
 npm i plomo --save
 ```
 
-```javascript
-import {Plomo} from "plomo";
-<Plomo loadData={this.loadData}/>
+```jsx
+import React, {Component} from "react";
+import Plomo from "plomo/src/components/plomo/Plomo";
+class App extends Component {
+	/**
+	 * Must return Promise<string[]>
+	 */
+	loadData = () => {
+		return new Promise(...);
+	}
+	render() {
+		return <Plomo loadData={this.loadData}/>
+	}
+}
 ```
+
+

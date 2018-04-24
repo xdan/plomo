@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styles from './app.module.less';
-import {Plomo} from "./components/autocoplete/Plomo";
+import Plomo from "./components/plomo/Plomo";
 import FuzzySearch from 'fuzzy-search';
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
