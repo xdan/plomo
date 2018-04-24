@@ -10,7 +10,7 @@
             "ie 10"
           ]
         },
-        "debug": true
+        "debug": false
       }
     ],
     "react",
