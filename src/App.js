@@ -12,7 +12,7 @@ const Header = () => <div className={styles.header}>
 const Footer = () => (<nav className={styles.footer}>
     <ul>
         <li><a href="https://github.com/xdan">Author</a></li>
-        <li><a href="https://github.com/xdan/suggestions">Github</a></li>
+        <li><a href="https://github.com/xdan/plomo">Github</a></li>
     </ul>
 </nav>);
 

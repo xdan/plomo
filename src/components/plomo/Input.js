@@ -56,6 +56,7 @@ export class Input extends Component {
                 type="text"
                 tabIndex={-1}
                 readOnly={true}
+                disabled={true}
             />
             <input
                 onKeyDown={this.onKeyDown}
