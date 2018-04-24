@@ -1,51 +1,11 @@
-import React, {Component} from "react";
-import styles from './style.module.less';
-import {Suggestions} from "./Suggestions";
-import {Input} from "./Input";
+import {CacheStack} from "../plomo/Plomo";
+import styles from '../plomo/style.module.less';
 import {NON_INDEX} from "../../consts";
+import {Input} from "./Input";
+import {Suggestions} from "./Suggestions";
+import {WithProps} from "./WithProps";
 
-export class CacheStack {
-    __stack = [];
-
-    exist(key) {
-        return this.indexOf(key) !== -1;
-    }
-    get(key) {
-        let index = this.indexOf(key);
-        return index !== -1 && this.__stack[index].value;
-    }
-
-    indexOf(key) {
-        for (let i = 0; i < this.__stack.length; i += 1) {
-            if (this.__stack[i].key === key) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    pushOrReplace(key, value) {
-        let index = this.indexOf(key);
-        if (index !== -1) {
-            this.__stack[index].value = value;
-        } else {
-            this.push(key, value);
-        }
-    }
-
-    push(key, value) {
-        this.__stack.unshift({
-            key, value
-        });
-
-        if (this.__stack.length > 100) {
-            this.__stack.length = 100;
-        }
-    }
-}
-
-class ClickOutside extends Component {
-    __elm = null;
+class ClickOutside extends WithProps{
     __isOutside = true;
 
     handleDocumentClick = (e) => {
@@ -55,24 +15,20 @@ class ClickOutside extends Component {
         this.__isOutside = true;
     };
 
-    componentDidMount () {
+
+    constructor (props) {
+        super(props);
+
         window.addEventListener('click', this.handleDocumentClick)
-        this.__elm.addEventListener('click', () => {
+        this.container.addEventListener('click', () => {
             this.__isOutside = false;
         })
     }
-
-    componentWillUnmount () {
-        window.removeEventListener('click', this.handleDocumentClick)
-    }
-
-    render() {
-        return <div ref={elm => this.__elm = elm}>{this.props.children}</div>;
-    }
 }
 
-export default class extends Component {
+export default class extends WithProps {
     stack = new CacheStack();
+
     showCount = 10;
 
     state = {
@@ -81,6 +37,57 @@ export default class extends Component {
         open: false,
         suggestions: []
     };
+
+    /**
+     * @type Suggestions
+     */
+    dropdownbox;
+
+    /**
+     * @type Input
+     */
+    input;
+
+
+    constructor(props) {
+        super(props);
+
+        this.container.classList.add(styles.root);
+        this.box = new ClickOutside({
+            handleClickOutside: this.handleClickOutside
+        });
+
+        this.container.appendChild(this.box.container);
+
+        this.input = new Input({
+            firstSuggestion: this.state.suggestions[0],
+            incrementCurrent: this.incrementCurrent,
+            onClick: this.openDropDown,
+            setQuery: this.setQuery,
+            query: this.state.query,
+            value: ''
+        });
+
+        this.box.container.appendChild(this.input.container)
+
+        this.dropdownbox = new Suggestions({
+            setQuery: this.setQuery,
+            query: this.state.query,
+            currentIndex: this.state.currentIndex,
+            list: this.state.suggestions
+        });
+
+        this.loadSuggestions('', false);
+
+        this.render();
+    }
+
+    setState(newstate){
+        if (this.state !== newstate) {
+            this.state = newstate;
+            this.render();
+        }
+    }
 
     handleClickOutside = (e) => {
         if (this.state.open) {
@@ -132,10 +139,6 @@ export default class extends Component {
             });
     }
 
-    componentDidMount () {
-        this.loadSuggestions('', false);
-    }
-
 
     setQuery = (query, andClose = false) => {
         if (query === null) {
@@ -158,7 +161,7 @@ export default class extends Component {
         }
 
         this.setState(newState);
-        
+
         if (!andClose) {
             this.loadSuggestions(query)
         }
@@ -177,20 +180,23 @@ export default class extends Component {
             currentValue = this.state.suggestions[this.state.currentIndex];
         }
 
-        return (<div className={styles.root}>
-            <ClickOutside handleClickOutside={this.handleClickOutside}>
-                <Input
-                    firstSuggestion = {this.state.suggestions[0]}
-                    incrementCurrent={this.incrementCurrent}
-                    onClick={this.openDropDown}
-                    setQuery={this.setQuery}
-                    query={this.state.query}
-                    value={currentValue}
-                />
-                {this.state.open && this.state.suggestions.length > 0 &&
-                    <Suggestions setQuery={this.setQuery} query={this.state.query} currentIndex={this.state.currentIndex} list={this.state.suggestions}/>
-                }
-            </ClickOutside>
-        </div>);
+        this.input.render({
+            firstSuggestion: this.state.suggestions[0],
+            query: this.state.query,
+            value: currentValue
+        });
+
+
+
+        if (this.state.open && this.state.suggestions.length > 0) {
+            this.dropdownbox.render({
+                query: this.state.query,
+                currentIndex: this.state.currentIndex,
+                list: this.state.suggestions
+            });
+            this.box.container.appendChild(this.dropdownbox.container)
+        } else {
+            this.dropdownbox.container.parentNode && this.dropdownbox.container.parentNode.removeChild(this.dropdownbox.container)
+        }
     }
 }
