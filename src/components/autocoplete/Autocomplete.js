@@ -179,7 +179,7 @@ export class Autocomplete extends Component {
                     value={currentValue}
                 />
                 {this.state.open && this.state.suggestions.length > 0 &&
-                    <Suggestions query={this.state.query} currentIndex={this.state.currentIndex} list={this.state.suggestions}/>
+                    <Suggestions setQuery={this.setQuery} query={this.state.query} currentIndex={this.state.currentIndex} list={this.state.suggestions}/>
                 }
             </ClickOutside>
         </div>);

@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import styles from './app.less';
+import styles from './app.module.less';
 import {Autocomplete} from "./components/autocoplete/Autocomplete";
 import FuzzySearch from 'fuzzy-search';
+import Toggle from 'react-toggle'
+import "react-toggle/style.css"
 
 const Header = () => (<div className={styles.header}>
     <h1>Autocomplete JS Plugin</h1>
@@ -30,6 +32,9 @@ const data = [
 ];
 
 class App extends Component {
+    state = {
+        gprs: true
+    };
     searcher;
     constructor() {
         super();
@@ -41,19 +46,36 @@ class App extends Component {
     loadData = (value) => {
         return new Promise((resolve) => {
             // GPRS
-            setTimeout(() => {
+            const callback = () => {
                 const result = this.searcher.search(value);
                 resolve(result);
-            }, 500)
+            };
+
+            if (this.state.gprs) {
+                setTimeout(callback, 500)
+            } else {
+                callback();
+            }
         });
     };
-
+    toggleGPRS = () => {
+        this.setState({
+            gprs: !this.state.gprs
+        });
+    };
     render () {
         return (
             <div className={styles.box}>
                 <Header/>
                 <Demo>
                     <Autocomplete loadData={this.loadData}/>
+                    <label>
+                        <Toggle
+                            checked={this.state.gprs}
+                            onChange={this.toggleGPRS}
+                        />
+                        <span>GPRS</span>
+                    </label>
                 </Demo>
                 <Footer/>
             </div>
