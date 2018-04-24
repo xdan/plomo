@@ -4,6 +4,7 @@ import styles from './style.module.less';
 const Suggestion = (props) => {
     let {value, query} = props;
     let index = value.toLowerCase().indexOf(query.toLowerCase());
+
     if (index !== -1 && query.length) {
         value = [
             <span key={0}>{value.substr(0, index)}</span>,

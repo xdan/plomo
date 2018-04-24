@@ -1,12 +1,19 @@
 import React, {Component} from "react";
 import styles from './style.module.less';
-import {KEY_DOWN,KEY_UP} from "../../consts";
+import {KEY_DOWN, KEY_ENTER, KEY_UP} from "../../consts";
 
 export class Input extends Component {
     onKeyDown = (e) => {
-        if (e.which === KEY_UP || e.which === KEY_DOWN) {
-            this.props.incrementCurrent(e.which === KEY_UP);
-            e.preventDefault();
+        switch (e.which) {
+            case KEY_ENTER:
+                this.props.setQuery(e.target.value, true);
+                e.preventDefault();
+                break;
+            case KEY_UP:
+            case KEY_DOWN:
+                this.props.incrementCurrent(e.which === KEY_UP);
+                e.preventDefault();
+                break;
         }
     };
     onChange = (e) => {
@@ -15,7 +22,7 @@ export class Input extends Component {
 
     render() {
         let placeholder = '',
-            {query, firstSuggestion} = this.props;
+            {query, firstSuggestion, value} = this.props;
 
         let index = typeof firstSuggestion === 'string' && firstSuggestion.toLowerCase().indexOf(query.toLowerCase());
 
@@ -25,6 +32,10 @@ export class Input extends Component {
 
         if (!query.length) {
             placeholder = 'Type something...'
+        }
+
+        if (query !== value) {
+            placeholder = '';
         }
 
         return <div onClick={this.props.onClick} className={styles.inputBox}>
@@ -38,7 +49,7 @@ export class Input extends Component {
             <input
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
-                defaultValue={query}
+                value={query === value ? query : value}
                 tabIndex={0}
                 type="text"
                 autoFocus={true}

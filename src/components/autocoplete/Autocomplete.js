@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import styles from './style.module.less';
 import {Suggestions} from "./Suggestions";
 import {Input} from "./Input";
+import {NON_INDEX} from "../../consts";
 
 export class ClickOutside extends Component {
     __elm = null;
@@ -31,13 +32,13 @@ export class ClickOutside extends Component {
     }
 }
 export class Autocomplete extends Component {
+    showCount = 10;
     state = {
         query: '',
-        currentIndex: -1,
+        currentIndex: NON_INDEX,
         open: false,
         suggestions: []
     };
-
 
     handleClickOutside = (e) => {
         if (this.state.open) {
@@ -53,10 +54,8 @@ export class Autocomplete extends Component {
         let currentIndex = this.state.currentIndex;
 
         if (up) {
-            if (currentIndex > 0) {
+            if (currentIndex > NON_INDEX) {
                 currentIndex -= 1;
-            } else {
-                currentIndex = this.state.suggestions.length - 1;
             }
         } else {
             if (currentIndex < this.state.suggestions.length - 1) {
@@ -80,8 +79,8 @@ export class Autocomplete extends Component {
             .then((suggestions) => {
                 this.setState({
                     ...this.state,
-                    currentIndex: -1,
-                    suggestions,
+                    currentIndex: NON_INDEX,
+                    suggestions: suggestions.slice(0, this.props.showCount || this.showCount),
                     open: autoOpen && suggestions.length > 0
                 });
             });
@@ -92,14 +91,17 @@ export class Autocomplete extends Component {
     }
 
 
-    setQuery = (query) => {
+    setQuery = (query, andClose = false) => {
         this.setState({
             ...this.state,
-            currentIndex: -1,
+            currentIndex: NON_INDEX,
+            open: !andClose,
             query
         });
-
-        this.loadSuggestions(query)
+        
+        if (!andClose) {
+            this.loadSuggestions(query)
+        }
     };
 
     openDropDown = () => {
@@ -110,6 +112,11 @@ export class Autocomplete extends Component {
     };
 
     render() {
+        let currentValue = this.state.query;
+        if (this.state.currentIndex !== NON_INDEX) {
+            currentValue = this.state.suggestions[this.state.currentIndex];
+        }
+
         return (<div className={styles.root}>
             <ClickOutside handleClickOutside={this.handleClickOutside}>
                 <Input
@@ -118,6 +125,7 @@ export class Autocomplete extends Component {
                     onClick={this.openDropDown}
                     setQuery={this.setQuery}
                     query={this.state.query}
+                    value={currentValue}
                 />
                 {this.state.open && this.state.suggestions.length > 0 &&
                     <Suggestions query={this.state.query} currentIndex={this.state.currentIndex} list={this.state.suggestions}/>

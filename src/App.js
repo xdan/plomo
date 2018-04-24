@@ -40,8 +40,11 @@ class App extends Component {
 
     loadData = (value) => {
         return new Promise((resolve) => {
-            const result = this.searcher.search(value);
-            resolve(result);
+            // GPRS
+            setTimeout(() => {
+                const result = this.searcher.search(value);
+                resolve(result);
+            }, 500)
         });
     };
 
