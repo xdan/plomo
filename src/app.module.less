@@ -16,6 +16,9 @@ body {
   color: @color-box;
   height: 100%;
   width: 1024px;
+  @media (max-width: 1024px) {
+    width: auto;
+  }
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -39,6 +42,10 @@ body {
 
     h1 {
       margin: 0;
+      font-size: 2rem;
+      @media (max-width: 500px) {
+        font-size: calc(3vw + 14px);
+      }
       display: inline-block;
     }
   }
