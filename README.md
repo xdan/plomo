@@ -33,6 +33,6 @@ document.body.appendChild(plomo.container);
 ```
 
 
-### Licence
+### License
 
 MIT
